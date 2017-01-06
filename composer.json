@@ -1,0 +1,45 @@
+{
+  "name":        "dreamfactory/df-saml",
+  "description": "SAML 2.0 support for DreamFactory",
+  "keywords":    [
+    "dreamfactory",
+    "dsp",
+    "rest",
+    "auth",
+    "saml",
+    "xml",
+    "authentication"
+  ],
+  "homepage":    "https://www.dreamfactory.com/",
+  "license":     "proprietary",
+  "authors":     [
+    {
+      "name":  "Arif Islam",
+      "email": "arifislam@dreamfactory.com"
+    },
+    {
+      "name":  "Lee Hicks",
+      "email": "leehicks@dreamfactory.com"
+    }
+  ],
+  "support":     {
+    "email":  "support@dreamfactory.com",
+    "source": "https://github.com/dreamfactorysoftware/df-saml",
+    "issues": "https://github.com/dreamfactorysoftware/df-saml/issues",
+    "wiki":   "https://wiki.dreamfactory.com"
+  },
+  "require":     {
+    "dreamfactory/df-core": "~0.6.0",
+    "onelogin/php-saml": "^2.10"
+  },
+  "autoload":    {
+    "psr-4": {
+      "DreamFactory\\Core\\Saml\\": "src/"
+    }
+  },
+  "extra":       {
+    "branch-alias": {
+      "dev-develop": "0.1.x-dev"
+    }
+  }
+}
