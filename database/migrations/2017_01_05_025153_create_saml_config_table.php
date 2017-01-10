@@ -28,6 +28,7 @@ class CreateSamlConfigTable extends Migration
                 //$t->text('idp_singleLogoutService_url');
                 $t->text('idp_x509cert')->nullable();
                 //$t->boolean('strict')->default(0);
+                $t->string('icon_class')->nullable();
             }
         );
     }
