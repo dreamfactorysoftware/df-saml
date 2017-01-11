@@ -3,14 +3,13 @@
 namespace DreamFactory\Core\Saml\Resources;
 
 use DreamFactory\Core\Exceptions\InternalServerErrorException;
-use DreamFactory\Core\Resources\BaseRestResource;
 use DreamFactory\Core\Resources\System\Environment;
 use DreamFactory\Core\Saml\Services\SAML;
 use DreamFactory\Core\Utility\Session;
 use DreamFactory\Core\Models\User;
 use Carbon\Carbon;
 
-class ACS extends BaseRestResource
+class ACS extends BaseSamlResource
 {
     const RESOURCE_NAME = 'acs';
 
@@ -115,4 +114,72 @@ class ACS extends BaseRestResource
         }
     }
 
+    /** {@inheritdoc} */
+    public static function getApiDocInfo($service, array $resource = [])
+    {
+        $base = parent::getApiDocInfo($service, $resource);
+        $serviceName = strtolower($service);
+        $class = trim(strrchr(static::class, '\\'), '\\');
+        $resourceName = strtolower(array_get($resource, 'name', $class));
+        $path = '/' . $serviceName . '/' . $resourceName;
+        unset($base['paths'][$path]['get']);
+
+        $base['paths'][$path]['post'] = [
+            'tags'        => [$serviceName],
+            'summary'     => 'processIdPResponse() - Process IdP response',
+            'operationId' => 'processResponse',
+            'consumes'    => ['application/xml'],
+            'produces'    => ['application/json', 'application/xml', 'text/csv', 'text/plain'],
+            'responses'   => [
+                '200'     => [
+                    'description' => 'Success',
+                    'schema'      => [
+                        'type'       => 'object',
+                        'properties' => [
+                            'session_token'   => [
+                                'type' => 'string'
+                            ],
+                            'session_id'      => [
+                                'type' => 'string'
+                            ],
+                            'id'              => [
+                                'type' => 'integer'
+                            ],
+                            'name'            => [
+                                'type' => 'string'
+                            ],
+                            'first_name'      => [
+                                'type' => 'string'
+                            ],
+                            'last_name'       => [
+                                'type' => 'string'
+                            ],
+                            'email'           => [
+                                'type' => 'string'
+                            ],
+                            'is_sys_admin'    => [
+                                'type' => 'boolean'
+                            ],
+                            'last_login_date' => [
+                                'type' => 'string'
+                            ],
+                            'host'            => [
+                                'type' => 'string'
+                            ]
+                        ]
+                    ]
+                ],
+                '302'     => [
+                    'description' => 'Redirect to RelayState',
+                ],
+                'default' => [
+                    'description' => 'Error',
+                    'schema'      => ['$ref' => '#/definitions/Error']
+                ]
+            ],
+            'description' => 'Processes XML IdP response, creates DreamFactory shadow user as needed, establishes sessions, returns JWT or redirects to RelayState.'
+        ];
+
+        return $base;
+    }
 }
