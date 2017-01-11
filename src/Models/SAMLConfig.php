@@ -25,6 +25,7 @@ class SAMLConfig extends BaseServiceConfigModel
         'idp_entityId',
         'idp_singleSignOnService_url',
         'idp_x509cert',
+        'icon_class',
     ];
 
     /** @var array */
@@ -100,6 +101,9 @@ class SAMLConfig extends BaseServiceConfigModel
             case 'idp_x509cert':
                 $schema['label'] = 'IdP x509cert';
                 $schema['description'] = 'Public x509 certificate of the Identity Provider.';
+                break;
+            case 'icon_class':
+                $schema['description'] = 'CSS Icon Class of the SAML 2.0 provider.';
                 break;
         }
     }
