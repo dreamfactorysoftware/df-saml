@@ -3,7 +3,7 @@
   "description": "SAML 2.0 support for DreamFactory",
   "keywords":    [
     "dreamfactory",
-    "dsp",
+    "api",
     "rest",
     "auth",
     "saml",
@@ -29,8 +29,8 @@
     "wiki":   "https://wiki.dreamfactory.com"
   },
   "require":     {
-    "dreamfactory/df-core": "~0.6.0",
-    "onelogin/php-saml": "^2.10"
+    "dreamfactory/df-core": "~0.7.0",
+    "onelogin/php-saml":    "^2.10"
   },
   "autoload":    {
     "psr-4": {
