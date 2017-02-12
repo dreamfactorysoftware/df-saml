@@ -159,7 +159,7 @@ class SAML extends BaseRestService
 
         $base['paths'] = array_merge($base['paths'], $apis);
         $base['definitions'] = array_merge($base['definitions'], $models);
-        unset($base['paths']['/saml']['get']['parameters']);
+        unset($base['paths']['/' . $service->name]['get']['parameters']);
 
         return $base;
     }
