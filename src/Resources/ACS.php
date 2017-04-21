@@ -72,6 +72,7 @@ class ACS extends BaseSamlResource
         if (empty($user)) {
             $serviceName = $this->getParent()->getName();
             $userData = [
+                'username'   => $email,
                 'name'       => 'SAML User',
                 'first_name' => 'SAML',
                 'last_name'  => 'USER',

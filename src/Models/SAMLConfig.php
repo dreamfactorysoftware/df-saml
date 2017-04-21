@@ -4,7 +4,6 @@ namespace DreamFactory\Core\Saml\Models;
 
 use DreamFactory\Core\Components\AppRoleMapper;
 use DreamFactory\Core\Models\BaseServiceConfigModel;
-use DreamFactory\Core\Models\AppRoleMap;
 use DreamFactory\Core\Models\Role;
 
 class SAMLConfig extends BaseServiceConfigModel
@@ -37,33 +36,22 @@ class SAMLConfig extends BaseServiceConfigModel
     /**
      * {@inheritdoc}
      */
-    public static function getConfigSchema()
-    {
-        $schema = parent::getConfigSchema();
-        $schema[] = AppRoleMap::getConfigSchema();
-
-        return $schema;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected static function prepareConfigSchemaField(array &$schema)
     {
-        $roles = Role::whereIsActive(1)->get();
-        $roleList = [];
-
-        foreach ($roles as $role) {
-            $roleList[] = [
-                'label' => $role->name,
-                'name'  => $role->id
-            ];
-        }
-
         parent::prepareConfigSchemaField($schema);
 
         switch ($schema['name']) {
             case 'default_role':
+                $roles = Role::whereIsActive(1)->get();
+                $roleList = [];
+
+                foreach ($roles as $role) {
+                    $roleList[] = [
+                        'label' => $role->name,
+                        'name'  => $role->id
+                    ];
+                }
+
                 $schema['type'] = 'picklist';
                 $schema['values'] = $roleList;
                 $schema['description'] = 'Select a default role for users logging in with this SAML 2.0 service type.';
