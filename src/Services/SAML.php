@@ -13,6 +13,11 @@ use DreamFactory\Core\Resources\System\Environment;
 
 class SAML extends BaseRestService
 {
+    /**
+     * SAML service provider name.
+     */
+    const PROVIDER_NAME = 'saml';
+
     /** @var DfSaml */
     protected $auth = null;
 
