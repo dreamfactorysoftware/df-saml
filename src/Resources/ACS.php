@@ -2,6 +2,7 @@
 
 namespace DreamFactory\Core\Saml\Resources;
 
+use DreamFactory\Core\Exceptions\BadRequestException;
 use DreamFactory\Core\Exceptions\InternalServerErrorException;
 use DreamFactory\Core\Resources\System\Environment;
 use DreamFactory\Core\Saml\Services\SAML;
@@ -18,6 +19,7 @@ class ACS extends BaseSamlResource
      */
     protected function handlePOST()
     {
+        $this->ensureSAMLResponse();
         /** @var SAML $service */
         $service = $this->getParent();
         $auth = $service->getAuth();
@@ -28,10 +30,7 @@ class ACS extends BaseSamlResource
             throw new InternalServerErrorException('Invalid ASC response received. ' . implode(', ', $errors));
         }
 
-        //$attributes = $auth->getAttributes();
-        //$nameIdFormat = $auth->getNameIdFormat();
         $nameId = $auth->getNameId();
-
         if (!$this->isEmail($nameId)) {
             $nameId = $nameId . '+' . $service->getName() . '@' . $service->getName() . '.com';
         } else {
@@ -54,8 +53,20 @@ class ACS extends BaseSamlResource
 
             return redirect()->to($relayState);
         }
+        $response['SAMLResponse'] = array_get($_POST, 'SAMLResponse');
 
         return $response;
+    }
+
+    protected function ensureSAMLResponse()
+    {
+        if (!isset($_POST) || !isset($_POST['SAMLResponse'])) {
+            $sr = $this->request->getPayloadData();
+            if(!isset($sr['SAMLResponse'])){
+                throw new BadRequestException('Invalid SAML Response provided');
+            }
+            $_POST = $sr;
+        }
     }
 
     /**
@@ -70,7 +81,6 @@ class ACS extends BaseSamlResource
         $user = User::whereEmail($email)->first();
 
         if (empty($user)) {
-            $serviceName = $this->getParent()->getName();
             $userData = [
                 'username'   => $email,
                 'name'       => 'SAML User',
@@ -78,7 +88,7 @@ class ACS extends BaseSamlResource
                 'last_name'  => 'USER',
                 'email'      => $email,
                 'is_active'  => true,
-                'saml'       => $serviceName,
+                'saml'       => SAML::PROVIDER_NAME,
             ];
 
             $user = User::create($userData);
