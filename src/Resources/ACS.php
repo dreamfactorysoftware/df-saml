@@ -27,7 +27,7 @@ class ACS extends BaseSamlResource
         $errors = $auth->getErrors();
 
         if (!empty($errors)) {
-            throw new InternalServerErrorException('Invalid ASC response received. ' . implode(', ', $errors));
+            throw new InternalServerErrorException('Bad response received from idp. ' . implode(', ', $errors));
         }
 
         $nameId = $auth->getNameId();
