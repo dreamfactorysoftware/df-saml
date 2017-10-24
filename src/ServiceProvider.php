@@ -24,6 +24,20 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
                     'factory'         => function ($config){
                         return new SAML($config);
                     },
+                    'access_exceptions' => [
+                        [
+                            'verb_mask' => 1,
+                            'resource'  => 'sso',
+                        ],
+                        [
+                            'verb_mask' => 2,
+                            'resource'  => 'acs',
+                        ],
+                        [
+                            'verb_mask' => 1,
+                            'resource'  => 'metadata',
+                        ]
+                    ],
                 ])
             );
         });
