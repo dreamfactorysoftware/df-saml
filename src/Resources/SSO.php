@@ -23,12 +23,15 @@ class SSO extends BaseSamlResource
     {
         $resourceName = strtolower($this->name);
         $path = '/' . $resourceName;
+        $service = $this->getServiceName();
+        $capitalized = camelize($service);
+        $class = trim(strrchr(static::class, '\\'), '\\');
 
         $base = [
             $path => [
                 'get' => [
-                    'summary'     => 'getSSO() - Perform authentication',
-                    'operationId' => 'getSSO',
+                    'summary'     => 'get' . $capitalized . $class . 'SSO() - Perform authentication',
+                    'operationId' => 'get' . $capitalized . $class . 'SSO',
                     'description' => 'Redirects to IdP login page.',
                     'responses'   => [
                         '302' => [

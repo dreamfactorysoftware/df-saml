@@ -130,13 +130,33 @@ class ACS extends BaseSamlResource
     {
         $resourceName = strtolower($this->name);
         $path = '/' . $resourceName;
+        $service = $this->getServiceName();
+        $capitalized = camelize($service);
+        $class = trim(strrchr(static::class, '\\'), '\\');
 
         $base = [
             $path => [
                 'post' => [
-                    'summary'     => 'processIdPResponse() - Process IdP response',
-                    'operationId' => 'processResponse',
+                    'summary'     => 'process' . $capitalized . $class . 'IdPResponse() - Process IdP response',
+                    'operationId' => 'process' . $capitalized . $class . 'IdPResponse',
                     'description' => 'Processes XML IdP response, creates DreamFactory shadow user as needed, establishes sessions, returns JWT or redirects to RelayState.',
+                    'requestBody' => [
+                        'description' => 'SAML Request.',
+                        'schema'      => [
+                            'type'       => 'object',
+                            'properties' => [
+                                'IdPResponse' => [
+                                    'type'        => 'string',
+                                    'required'    => true,
+                                    'description' => 'The XML IdP response.'
+                                ],
+                                'relay_state'  => [
+                                    'type'        => 'string',
+                                    'description' => 'Value of the current relay state.'
+                                ]
+                            ]
+                        ],
+                    ],
                     'responses'   => [
                         '200' => [
                             'description' => 'Success',
