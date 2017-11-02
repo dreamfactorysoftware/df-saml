@@ -35,13 +35,12 @@ class Metadata extends BaseSamlResource
         $path = '/' . $resourceName;
         $service = $this->getServiceName();
         $capitalized = camelize($service);
-        $class = trim(strrchr(static::class, '\\'), '\\');
 
         $base = [
             $path => [
                 'get' => [
-                    'summary'     => 'get' . $capitalized . $class . 'Metadata() - Gets SAML 2.0 metadata',
-                    'operationId' => 'get' . $capitalized . $class . 'Metadata',
+                    'summary'     => 'get' . $capitalized . 'Metadata() - Gets SAML 2.0 metadata',
+                    'operationId' => 'get' . $capitalized . 'Metadata',
                     'description' => 'Generates SAML 2.0 XML metadata.',
                     'responses'   => [
                         '200' => [

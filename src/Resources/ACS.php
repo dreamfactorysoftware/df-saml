@@ -132,29 +132,32 @@ class ACS extends BaseSamlResource
         $path = '/' . $resourceName;
         $service = $this->getServiceName();
         $capitalized = camelize($service);
-        $class = trim(strrchr(static::class, '\\'), '\\');
 
         $base = [
             $path => [
                 'post' => [
-                    'summary'     => 'process' . $capitalized . $class . 'IdPResponse() - Process IdP response',
-                    'operationId' => 'process' . $capitalized . $class . 'IdPResponse',
+                    'summary'     => 'process' . $capitalized . 'IdPResponse() - Process IdP response',
+                    'operationId' => 'process' . $capitalized . 'IdPResponse',
                     'description' => 'Processes XML IdP response, creates DreamFactory shadow user as needed, establishes sessions, returns JWT or redirects to RelayState.',
                     'requestBody' => [
                         'description' => 'SAML Request.',
-                        'schema'      => [
-                            'type'       => 'object',
-                            'properties' => [
-                                'IdPResponse' => [
-                                    'type'        => 'string',
-                                    'required'    => true,
-                                    'description' => 'The XML IdP response.'
+                        'content'     => [
+                            'application/json' => [
+                                'schema' => [
+                                    'type'       => 'object',
+                                    'properties' => [
+                                        'IdPResponse' => [
+                                            'type'        => 'string',
+                                            'required'    => true,
+                                            'description' => 'The XML IdP response.'
+                                        ],
+                                        'relay_state' => [
+                                            'type'        => 'string',
+                                            'description' => 'Value of the current relay state.'
+                                        ],
+                                    ],
                                 ],
-                                'relay_state'  => [
-                                    'type'        => 'string',
-                                    'description' => 'Value of the current relay state.'
-                                ]
-                            ]
+                            ],
                         ],
                     ],
                     'responses'   => [
@@ -165,36 +168,16 @@ class ACS extends BaseSamlResource
                                     'schema' => [
                                         'type'       => 'object',
                                         'properties' => [
-                                            'session_token'   => [
-                                                'type' => 'string'
-                                            ],
-                                            'session_id'      => [
-                                                'type' => 'string'
-                                            ],
-                                            'id'              => [
-                                                'type' => 'integer'
-                                            ],
-                                            'name'            => [
-                                                'type' => 'string'
-                                            ],
-                                            'first_name'      => [
-                                                'type' => 'string'
-                                            ],
-                                            'last_name'       => [
-                                                'type' => 'string'
-                                            ],
-                                            'email'           => [
-                                                'type' => 'string'
-                                            ],
-                                            'is_sys_admin'    => [
-                                                'type' => 'boolean'
-                                            ],
-                                            'last_login_date' => [
-                                                'type' => 'string'
-                                            ],
-                                            'host'            => [
-                                                'type' => 'string'
-                                            ]
+                                            'session_token'   => ['type' => 'string'],
+                                            'session_id'      => ['type' => 'string'],
+                                            'id'              => ['type' => 'integer'],
+                                            'name'            => ['type' => 'string'],
+                                            'first_name'      => ['type' => 'string'],
+                                            'last_name'       => ['type' => 'string'],
+                                            'email'           => ['type' => 'string'],
+                                            'is_sys_admin'    => ['type' => 'boolean'],
+                                            'last_login_date' => ['type' => 'string'],
+                                            'host'            => ['type' => 'string'],
                                         ]
                                     ]
                                 ]
