@@ -29,9 +29,9 @@ class SSO extends BaseSamlResource
         $base = [
             $path => [
                 'get' => [
-                    'summary'     => 'get' . $capitalized . 'SSO() - Perform authentication',
-                    'operationId' => 'get' . $capitalized . 'SSO',
+                    'summary'     => 'Perform authentication',
                     'description' => 'Redirects to IdP login page.',
+                    'operationId' => 'get' . $capitalized . 'SSO',
                     'responses'   => [
                         '302' => [
                             'description' => 'Redirect to IdP',

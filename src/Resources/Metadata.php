@@ -39,9 +39,9 @@ class Metadata extends BaseSamlResource
         $base = [
             $path => [
                 'get' => [
-                    'summary'     => 'get' . $capitalized . 'Metadata() - Gets SAML 2.0 metadata',
-                    'operationId' => 'get' . $capitalized . 'Metadata',
+                    'summary'     => 'Gets SAML 2.0 metadata',
                     'description' => 'Generates SAML 2.0 XML metadata.',
+                    'operationId' => 'get' . $capitalized . 'Metadata',
                     'responses'   => [
                         '200' => [
                             'description' => 'Success',

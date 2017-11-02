@@ -136,9 +136,9 @@ class ACS extends BaseSamlResource
         $base = [
             $path => [
                 'post' => [
-                    'summary'     => 'process' . $capitalized . 'IdPResponse() - Process IdP response',
-                    'operationId' => 'process' . $capitalized . 'IdPResponse',
+                    'summary'     => 'Process IdP response',
                     'description' => 'Processes XML IdP response, creates DreamFactory shadow user as needed, establishes sessions, returns JWT or redirects to RelayState.',
+                    'operationId' => 'process' . $capitalized . 'IdPResponse',
                     'requestBody' => [
                         'description' => 'SAML Request.',
                         'content'     => [
