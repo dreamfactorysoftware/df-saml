@@ -27,7 +27,7 @@ class ACS extends BaseSamlResource
         $errors = $auth->getErrors();
 
         if (!empty($errors)) {
-            throw new InternalServerErrorException('Invalid ASC response received. ' . implode(', ', $errors));
+            throw new InternalServerErrorException('Bad response received from idp. ' . implode(', ', $errors));
         }
 
         $nameId = $auth->getNameId();
@@ -62,7 +62,7 @@ class ACS extends BaseSamlResource
     {
         if (!isset($_POST) || !isset($_POST['SAMLResponse'])) {
             $sr = $this->request->getPayloadData();
-            if(!isset($sr['SAMLResponse'])){
+            if (!isset($sr['SAMLResponse'])) {
                 throw new BadRequestException('Invalid SAML Response provided');
             }
             $_POST = $sr;
@@ -126,69 +126,69 @@ class ACS extends BaseSamlResource
     }
 
     /** {@inheritdoc} */
-    public static function getApiDocInfo($service, array $resource = [])
+    protected function getApiDocPaths()
     {
-        $base = parent::getApiDocInfo($service, $resource);
-        $serviceName = strtolower($service);
-        $class = trim(strrchr(static::class, '\\'), '\\');
-        $resourceName = strtolower(array_get($resource, 'name', $class));
-        $path = '/' . $serviceName . '/' . $resourceName;
-        unset($base['paths'][$path]['get']);
+        $resourceName = strtolower($this->name);
+        $path = '/' . $resourceName;
+        $service = $this->getServiceName();
+        $capitalized = camelize($service);
 
-        $base['paths'][$path]['post'] = [
-            'tags'        => [$serviceName],
-            'summary'     => 'processIdPResponse() - Process IdP response',
-            'operationId' => 'processResponse',
-            'consumes'    => ['application/xml'],
-            'produces'    => ['application/json', 'application/xml', 'text/csv', 'text/plain'],
-            'responses'   => [
-                '200'     => [
-                    'description' => 'Success',
-                    'schema'      => [
-                        'type'       => 'object',
-                        'properties' => [
-                            'session_token'   => [
-                                'type' => 'string'
+        $base = [
+            $path => [
+                'post' => [
+                    'summary'     => 'Process IdP response',
+                    'description' => 'Processes XML IdP response, creates DreamFactory shadow user as needed, establishes sessions, returns JWT or redirects to RelayState.',
+                    'operationId' => 'process' . $capitalized . 'IdPResponse',
+                    'requestBody' => [
+                        'description' => 'SAML Request.',
+                        'content'     => [
+                            'application/json' => [
+                                'schema' => [
+                                    'type'       => 'object',
+                                    'properties' => [
+                                        'IdPResponse' => [
+                                            'type'        => 'string',
+                                            'required'    => true,
+                                            'description' => 'The XML IdP response.'
+                                        ],
+                                        'relay_state' => [
+                                            'type'        => 'string',
+                                            'description' => 'Value of the current relay state.'
+                                        ],
+                                    ],
+                                ],
                             ],
-                            'session_id'      => [
-                                'type' => 'string'
-                            ],
-                            'id'              => [
-                                'type' => 'integer'
-                            ],
-                            'name'            => [
-                                'type' => 'string'
-                            ],
-                            'first_name'      => [
-                                'type' => 'string'
-                            ],
-                            'last_name'       => [
-                                'type' => 'string'
-                            ],
-                            'email'           => [
-                                'type' => 'string'
-                            ],
-                            'is_sys_admin'    => [
-                                'type' => 'boolean'
-                            ],
-                            'last_login_date' => [
-                                'type' => 'string'
-                            ],
-                            'host'            => [
-                                'type' => 'string'
+                        ],
+                    ],
+                    'responses'   => [
+                        '200' => [
+                            'description' => 'Success',
+                            'content'     => [
+                                'application/json' => [
+                                    'schema' => [
+                                        'type'       => 'object',
+                                        'properties' => [
+                                            'session_token'   => ['type' => 'string'],
+                                            'session_id'      => ['type' => 'string'],
+                                            'id'              => ['type' => 'integer'],
+                                            'name'            => ['type' => 'string'],
+                                            'first_name'      => ['type' => 'string'],
+                                            'last_name'       => ['type' => 'string'],
+                                            'email'           => ['type' => 'string'],
+                                            'is_sys_admin'    => ['type' => 'boolean'],
+                                            'last_login_date' => ['type' => 'string'],
+                                            'host'            => ['type' => 'string'],
+                                        ]
+                                    ]
+                                ]
                             ]
-                        ]
-                    ]
+                        ],
+                        '302' => [
+                            'description' => 'Redirect to RelayState',
+                        ],
+                    ],
                 ],
-                '302'     => [
-                    'description' => 'Redirect to RelayState',
-                ],
-                'default' => [
-                    'description' => 'Error',
-                    'schema'      => ['$ref' => '#/definitions/Error']
-                ]
             ],
-            'description' => 'Processes XML IdP response, creates DreamFactory shadow user as needed, establishes sessions, returns JWT or redirects to RelayState.'
         ];
 
         return $base;

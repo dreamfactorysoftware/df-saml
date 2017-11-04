@@ -19,30 +19,26 @@ class SSO extends BaseSamlResource
     }
 
     /** {@inheritdoc} */
-    public static function getApiDocInfo($service, array $resource = [])
+    protected function getApiDocPaths()
     {
-        $base = parent::getApiDocInfo($service, $resource);
-        $serviceName = strtolower($service);
-        $class = trim(strrchr(static::class, '\\'), '\\');
-        $resourceName = strtolower(array_get($resource, 'name', $class));
-        $path = '/' . $serviceName . '/' . $resourceName;
+        $resourceName = strtolower($this->name);
+        $path = '/' . $resourceName;
+        $service = $this->getServiceName();
+        $capitalized = camelize($service);
 
-        $base['paths'][$path]['get'] = [
-            'tags'        => [$serviceName],
-            'summary'     => 'getSSO() - Perform authentication',
-            'operationId' => 'getSSO',
-            'consumes'    => [],
-            'produces'    => ['application/json', 'application/xml', 'text/csv'],
-            'responses'   => [
-                '302'     => [
-                    'description' => 'Redirect to IdP',
+        $base = [
+            $path => [
+                'get' => [
+                    'summary'     => 'Perform authentication',
+                    'description' => 'Redirects to IdP login page.',
+                    'operationId' => 'get' . $capitalized . 'SSO',
+                    'responses'   => [
+                        '302' => [
+                            'description' => 'Redirect to IdP',
+                        ],
+                    ],
                 ],
-                'default' => [
-                    'description' => 'Error',
-                    'schema'      => ['$ref' => '#/definitions/Error']
-                ]
             ],
-            'description' => 'Redirects to IdP login page.'
         ];
 
         return $base;

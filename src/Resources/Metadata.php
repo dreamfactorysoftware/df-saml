@@ -29,30 +29,26 @@ class Metadata extends BaseSamlResource
     }
 
     /** {@inheritdoc} */
-    public static function getApiDocInfo($service, array $resource = [])
+    protected function getApiDocPaths()
     {
-        $base = parent::getApiDocInfo($service, $resource);
-        $serviceName = strtolower($service);
-        $class = trim(strrchr(static::class, '\\'), '\\');
-        $resourceName = strtolower(array_get($resource, 'name', $class));
-        $path = '/' . $serviceName . '/' . $resourceName;
+        $resourceName = strtolower($this->name);
+        $path = '/' . $resourceName;
+        $service = $this->getServiceName();
+        $capitalized = camelize($service);
 
-        $base['paths'][$path]['get'] = [
-            'tags'        => [$serviceName],
-            'summary'     => 'getMetadata() - Gets SAML 2.0 metadata',
-            'operationId' => 'getMetadata',
-            'consumes'    => [],
-            'produces'    => ['application/json', 'application/xml', 'text/csv'],
-            'responses'   => [
-                '200'     => [
-                    'description' => 'Success',
+        $base = [
+            $path => [
+                'get' => [
+                    'summary'     => 'Gets SAML 2.0 metadata',
+                    'description' => 'Generates SAML 2.0 XML metadata.',
+                    'operationId' => 'get' . $capitalized . 'Metadata',
+                    'responses'   => [
+                        '200' => [
+                            'description' => 'Success',
+                        ],
+                    ],
                 ],
-                'default' => [
-                    'description' => 'Error',
-                    'schema'      => ['$ref' => '#/definitions/Error']
-                ]
             ],
-            'description' => 'Generates SAML 2.0 XML metadata.'
         ];
 
         return $base;
