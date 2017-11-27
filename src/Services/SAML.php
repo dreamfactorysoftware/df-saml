@@ -8,7 +8,7 @@ use DreamFactory\Core\Saml\Resources\Metadata;
 use DreamFactory\Core\Saml\Resources\SSO;
 use DreamFactory\Core\Services\BaseRestService;
 use DreamFactory\Core\Exceptions\InternalServerErrorException;
-use DreamFactory\Core\Resources\System\Environment;
+use DreamFactory\Core\Utility\Environment;
 
 class SAML extends BaseRestService
 {
