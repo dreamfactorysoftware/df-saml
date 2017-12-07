@@ -85,12 +85,6 @@ class SAML extends BaseRestService
         $this->auth = new DfSaml($samlSettings);
     }
 
-    /** @inheritdoc */
-    public function getResources($only_handlers = false)
-    {
-        return ($only_handlers) ? static::$resources : array_values(static::$resources);
-    }
-
     /**
      * @return \DreamFactory\Core\Saml\Components\DfSaml
      */
