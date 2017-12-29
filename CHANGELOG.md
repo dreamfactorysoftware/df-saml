@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+## [0.8.0] - 2017-12-28
+- Added package discovery
+- Used environment utility instead of system resource
+- Separated resources from resource handlers
 
 ## [0.7.0] - 2017-11-03
 - Added api required endpoint access exceptions
@@ -38,7 +42,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## 0.1.0 - 2017-01-06
 First official release of this library.
 
-[Unreleased]: https://github.com/dreamfactorysoftware/df-saml/compare/0.7.0...HEAD
+[Unreleased]: https://github.com/dreamfactorysoftware/df-saml/compare/0.8.0...HEAD
+[0.8.0]: https://github.com/dreamfactorysoftware/df-saml/compare/0.7.0...0.8.0
 [0.7.0]: https://github.com/dreamfactorysoftware/df-saml/compare/0.6.0...0.7.0
 [0.6.0]: https://github.com/dreamfactorysoftware/df-saml/compare/0.5.0...0.6.0
 [0.5.0]: https://github.com/dreamfactorysoftware/df-saml/compare/0.4.0...0.5.0

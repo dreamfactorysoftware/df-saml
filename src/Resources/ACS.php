@@ -4,10 +4,10 @@ namespace DreamFactory\Core\Saml\Resources;
 
 use DreamFactory\Core\Exceptions\BadRequestException;
 use DreamFactory\Core\Exceptions\InternalServerErrorException;
-use DreamFactory\Core\Resources\System\Environment;
-use DreamFactory\Core\Saml\Services\SAML;
-use DreamFactory\Core\Utility\Session;
 use DreamFactory\Core\Models\User;
+use DreamFactory\Core\Saml\Services\SAML;
+use DreamFactory\Core\Utility\Environment;
+use DreamFactory\Core\Utility\Session;
 use Carbon\Carbon;
 
 class ACS extends BaseSamlResource

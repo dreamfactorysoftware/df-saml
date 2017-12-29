@@ -8,7 +8,7 @@ use DreamFactory\Core\Saml\Resources\Metadata;
 use DreamFactory\Core\Saml\Resources\SSO;
 use DreamFactory\Core\Services\BaseRestService;
 use DreamFactory\Core\Exceptions\InternalServerErrorException;
-use DreamFactory\Core\Resources\System\Environment;
+use DreamFactory\Core\Utility\Environment;
 
 class SAML extends BaseRestService
 {
@@ -83,12 +83,6 @@ class SAML extends BaseRestService
         $this->defaultRole = array_get($this->config, 'default_role');
         $this->relayState = array_get($this->config, 'relay_state');
         $this->auth = new DfSaml($samlSettings);
-    }
-
-    /** @inheritdoc */
-    public function getResources($only_handlers = false)
-    {
-        return ($only_handlers) ? static::$resources : array_values(static::$resources);
     }
 
     /**
