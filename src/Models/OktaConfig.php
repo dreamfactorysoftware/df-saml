@@ -6,33 +6,8 @@ use DreamFactory\Core\Components\AppRoleMapper;
 use DreamFactory\Core\Models\BaseServiceConfigModel;
 use DreamFactory\Core\Models\Role;
 
-class OktaConfig extends BaseServiceConfigModel
+class OktaConfig extends SAMLConfig
 {
-    use AppRoleMapper;
-
-    /** @var string */
-    protected $table = 'saml_config';
-
-    /** @var array */
-    protected $fillable = [
-        'service_id',
-        'default_role',
-        'sp_nameIDFormat',
-        'sp_x509cert',
-        'sp_privateKey',
-        'relay_state',
-        'idp_entityId',
-        'idp_singleSignOnService_url',
-        'idp_x509cert',
-        'icon_class',
-    ];
-
-    /** @var array */
-    protected $casts = [
-        'service_id'   => 'integer',
-        'default_role' => 'integer',
-    ];
-
     /**
      * {@inheritdoc}
      */
