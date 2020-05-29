@@ -3,6 +3,7 @@
 namespace DreamFactory\Core\Saml;
 
 use DreamFactory\Core\Enums\LicenseLevel;
+use DreamFactory\Core\Saml\Models\Auth0Config;
 use DreamFactory\Core\Saml\Models\OktaConfig;
 use DreamFactory\Core\Saml\Models\SAMLConfig;
 use DreamFactory\Core\Saml\Services\SAML;
@@ -53,6 +54,20 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
                     'group'                 => ServiceTypeGroups::SSO,
                     'subscription_required' => LicenseLevel::SILVER,
                     'config_handler'        => OktaConfig::class,
+                    'factory'               => function ($config) {
+                        return new SAML($config);
+                    },
+                    'access_exceptions'     => $access_exceptions,
+                ])
+            );
+            $df->addType(
+                new ServiceType([
+                    'name'                  => 'auth0_sso',
+                    'label'                 => 'Auth0 SSO',
+                    'description'           => 'Auth0 service supporting SSO.',
+                    'group'                 => ServiceTypeGroups::SSO,
+                    'subscription_required' => LicenseLevel::SILVER,
+                    'config_handler'        => Auth0Config::class,
                     'factory'               => function ($config) {
                         return new SAML($config);
                     },
