@@ -2,7 +2,9 @@
 
 namespace DreamFactory\Core\Saml\Components;
 
-class DfSaml extends \OneLogin_Saml2_Auth
+use OneLogin\Saml2\Auth;
+
+class DfSaml extends Auth
 {
 
 }
