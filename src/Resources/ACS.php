@@ -9,6 +9,7 @@ use DreamFactory\Core\Saml\Services\SAML;
 use DreamFactory\Core\Utility\Environment;
 use DreamFactory\Core\Utility\Session;
 use Carbon\Carbon;
+use Arr;
 
 class ACS extends BaseSamlResource
 {
@@ -49,11 +50,11 @@ class ACS extends BaseSamlResource
         $ssoUrl = Environment::getURI() . '/api/v2/' . $this->getParent()->getName() . '/sso';
 
         if (!empty($relayState) && rtrim($relayState, '/') !== $ssoUrl) {
-            $relayState = str_replace('_token_', array_get($response, 'session_token'), $relayState);
+            $relayState = str_replace('_token_', Arr::get($response, 'session_token'), $relayState);
 
             return redirect()->to($relayState);
         }
-        $response['SAMLResponse'] = array_get($_POST, 'SAMLResponse');
+        $response['SAMLResponse'] = Arr::get($_POST, 'SAMLResponse');
 
         return $response;
     }
