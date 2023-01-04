@@ -9,6 +9,7 @@ use DreamFactory\Core\Saml\Resources\SSO;
 use DreamFactory\Core\Services\BaseRestService;
 use DreamFactory\Core\Exceptions\InternalServerErrorException;
 use DreamFactory\Core\Utility\Environment;
+use Arr;
 
 class SAML extends BaseRestService
 {
@@ -62,26 +63,25 @@ class SAML extends BaseRestService
         $spBaseUrl = Environment::getURI() . '/api/v2/' . $this->name;
 
         $samlSettings = [
-            'strict' => array_get($this->config, 'strict', false),
+            'strict' => Arr::get($this->config, 'strict', false),
             'sp'     => [
                 'entityId'                 => $spBaseUrl . '/metadata',
                 'assertionConsumerService' => ['url' => $spBaseUrl . '/acs'],
-                'NameIDFormat'             => array_get($this->config, 'sp_nameIDFormat',
-                    'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress'),
-                'x509cert'                 => array_get($this->config, 'sp_x509cert', ''),
-                'privateKey'               => array_get($this->config, 'sp_privateKey', ''),
+                'NameIDFormat'             => Arr::get($this->config, 'sp_nameIDFormat', 'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress'),
+                'x509cert'                 => Arr::get($this->config, 'sp_x509cert', ''),
+                'privateKey'               => Arr::get($this->config, 'sp_privateKey', ''),
             ],
             'idp'    => [
-                'entityId'            => array_get($this->config, 'idp_entityId', ''),
-                'singleSignOnService' => ['url' => array_get($this->config, 'idp_singleSignOnService_url', '')],
-                'singleLogoutService' => ['url' => array_get($this->config, 'idp_singleLogoutService_url', '')],
-                'x509cert'            => array_get($this->config, 'idp_x509cert'),
+                'entityId'            => Arr::get($this->config, 'idp_entityId', ''),
+                'singleSignOnService' => ['url' => Arr::get($this->config, 'idp_singleSignOnService_url', '')],
+                'singleLogoutService' => ['url' => Arr::get($this->config, 'idp_singleLogoutService_url', '')],
+                'x509cert'            => Arr::get($this->config, 'idp_x509cert'),
             ],
         ];
 
         $this->settings = $samlSettings;
-        $this->defaultRole = array_get($this->config, 'default_role');
-        $this->relayState = array_get($this->config, 'relay_state');
+        $this->defaultRole = Arr::get($this->config, 'default_role');
+        $this->relayState = Arr::get($this->config, 'relay_state');
         $this->auth = new DfSaml($samlSettings);
     }
 
