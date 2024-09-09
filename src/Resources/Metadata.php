@@ -17,10 +17,19 @@ class Metadata extends BaseSamlResource
      */
     protected function handleGET()
     {
+        // Check if the user is authenticated
         if (!SessionUtilities::isAuthenticated()) {
-            return ResponseFactory::sendException(new BadRequestException(
-                "No session token (JWT) provided. Please provide a valid JWT using X-DreamFactory-Session-Token request header or 'session_token' url query parameter."
-            ));
+            // Return a JSON response with the appropriate headers
+            return ResponseFactory::create(
+                [
+                    'error' => [
+                        'code' => 400,
+                        'message' => "No session token (JWT) provided. Please provide a valid JWT using X-DreamFactory-Session-Token request header or 'session_token' url query parameter."
+                    ]
+                ],
+                'application/json', // Set content-type to JSON
+                400 // HTTP status code
+            );
         }
         /** @var SAML $service */
         $service = $this->getParent();
