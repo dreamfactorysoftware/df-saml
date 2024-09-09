@@ -2,9 +2,11 @@
 
 namespace DreamFactory\Core\Saml\Resources;
 
+use DreamFactory\Core\Exceptions\BadRequestException;
 use DreamFactory\Core\Exceptions\InternalServerErrorException;
 use DreamFactory\Core\Saml\Services\SAML;
 use DreamFactory\Core\Utility\ResponseFactory;
+use DreamFactory\Core\Utility\Session as SessionUtilities;
 
 class Metadata extends BaseSamlResource
 {
@@ -15,6 +17,11 @@ class Metadata extends BaseSamlResource
      */
     protected function handleGET()
     {
+        if (!SessionUtilities::isAuthenticated()) {
+            return ResponseFactory::sendException(new BadRequestException(
+                "No session token (JWT) provided. Please provide a valid JWT using X-DreamFactory-Session-Token request header or 'session_token' url query parameter."
+            ));
+        }
         /** @var SAML $service */
         $service = $this->getParent();
         $settings = $service->getAuth()->getSettings();
