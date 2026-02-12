@@ -31,7 +31,7 @@
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require":     {
-    "dreamfactory/df-core": "~1.0",
+    "dreamfactory/df-core": "~1.1",
     "onelogin/php-saml":    "4.1.0"
   },
   "autoload":    {
